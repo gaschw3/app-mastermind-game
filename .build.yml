@@ -1,16 +1,20 @@
 # SourceHut Build Manifest
-image: alpine
+image: alpine/latest
+oauth: pages.sr.ht/PAGES:RW
 packages:
     - nodejs
     - yarn
+    - hut
+environment:
+    site: mastermind-game.lixquid.com
 sources:
     - https://github.com/lixquid/app-mastermind-game
 tasks:
     - build: |
-          cd app-mastermind-game
+          cd *
           yarn install
           yarn build
     - package: |
-          cd app-mastermind-game
-          tar czvf dist.tgz .
-          acurl -f https://pages.sr.ht/publish/mastermind-game.lixquid.com -Fcontent=@dist.tgz
+          cd *
+          tar czvf dist.tgz dist
+          hut pages publish -d $site dist.tgz
