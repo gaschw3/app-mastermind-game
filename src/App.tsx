@@ -9,6 +9,15 @@ import { GameState } from "./lib/data";
 import { useGameSettings } from "./lib/hooks";
 import { calculateGuess } from "./lib/util";
 
+/** Toggles bootstrap theme between light and dark */
+function toggleDarkMode() {
+    const html = document.querySelector("html");
+    if (html !== null) {
+        html.dataset.bsTheme =
+            html.dataset.bsTheme === "dark" ? "light" : "dark";
+    }
+}
+
 export function App() {
     const [settings, setSettings] = useGameSettings();
     // `null` means the game hasn't started yet.
@@ -20,6 +29,13 @@ export function App() {
             <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap">
                 <h1>Mastermind</h1>
                 <div>
+                    <button
+                        class="btn btn-outline-secondary me-2"
+                        onClick={toggleDarkMode}
+                        title="Toggle dark mode"
+                    >
+                        <i class="bi bi-moon-fill" />
+                    </button>
                     <button
                         class="btn btn-info me-2"
                         onClick={() => setShowHelp(true)}
