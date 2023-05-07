@@ -15,6 +15,6 @@ tasks:
           yarn install
           yarn build
     - package: |
-          cd *
-          tar czvf dist.tgz dist
-          hut pages publish -d $site dist.tgz
+          cd */dist
+          tar czvf ../dist.tgz *
+          hut pages publish -d $site ../dist.tgz
