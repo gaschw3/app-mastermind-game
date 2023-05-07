@@ -1,11 +1,11 @@
-# Mastermind
+# [Mastermind](https://mastermind-game.lixquid.com)
 
 An online version of the classic Mastermind game (also known as Bulls and Cows).
 
 Help is available in the game by clicking the Help button in the top right
 corner.
 
-[Play it here!](https://mastermind-game.lixquid.com)
+https://mastermind-game.lixquid.com
 
 ## Features
 
