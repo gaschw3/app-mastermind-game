@@ -25,7 +25,7 @@ https://mastermind-game.lixquid.com
 
 1. Clone the repository
 2. Install dependencies: `yarn install`
-3. Start the development server: `yarn dev`
+3. Start the development server: `yarn start`
 4. Open http://localhost:1234 in your browser
 
 Changes to the source files will be automatically reloaded in the browser.
