@@ -1,57 +1,41 @@
-import { GameState } from "../lib/data";
+import { GameState, getFeedback } from "../lib/data";
 
 /** Props for Guess component */
 interface GuessProps {
     /** The guess to display */
     guess: GameState["guesses"][number];
+    solution: GameState["solution"];
     /** The number of the guess */
     guessNumber: number;
 }
 
 export function Guess(props: GuessProps) {
+    const digits = props.guess.guess;
+    const feedback = getFeedback(props.guess.guess, props.solution);
+
     return (
         <div class="card mt-3">
             <div class="card-header">Guess {props.guessNumber}</div>
             <div class="card-body">
                 <div class="row">
-                    {props.guess.guess.map((slot, i) => {
+                    {digits.map((slot, i) => {
+                        let bgClass = "bg-dark";
+                        if (feedback[i] === "correct") {
+                            bgClass = "bg-success text-white";
+                        } else if (feedback[i] === "misplaced") {
+                            bgClass = "bg-warning text-dark";
+                        }
+
                         return (
-                            <div class="col">
-                                <div class="card">
+                            <div class="col" key={i}>
+                                <div class={`card ${bgClass}`}>
                                     <div class="card-body text-center h1">
-                                        {slot}
+                                        {slot === " " ? <span class="text-muted">_</span> : slot}
                                     </div>
                                 </div>
                             </div>
                         );
                     })}
-                </div>
-            </div>
-            <div class="card-body border-top">
-                <div class="row">
-                    <div class="col text-center">
-                        <div class="card-text text-success h3">
-                            <i class="bi bi-check-circle me-2" />
-                            Correct: <strong>{props.guess.correct}</strong>
-                        </div>
-                    </div>
-                    <div class="col text-center">
-                        <div class="card-text text-warning h3">
-                            <i class="bi bi-exclamation-circle me-2" />
-                            Misplaced: <strong>{props.guess.misplaced}</strong>
-                        </div>
-                    </div>
-                    <div class="col text-center">
-                        <div class="card-text text-danger h3">
-                            <i class="bi bi-x-circle me-2" />
-                            Incorrect:{" "}
-                            <strong>
-                                {props.guess.guess.length -
-                                    props.guess.correct -
-                                    props.guess.misplaced}
-                            </strong>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

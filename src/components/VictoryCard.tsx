@@ -16,7 +16,12 @@ export function VictoryCard(props: VictoryCardProps) {
                 <div class="d-flex justify-content-end align-items-center mt-3">
                     <button
                         class="btn btn-primary btn-lg"
-                        onClick={props.newGame}
+                        onClick={() => {
+                            const newUrl = window.location.origin + window.location.pathname;
+                            window.history.replaceState({}, "", newUrl);
+
+                            props.newGame();
+                        }}
                     >
                         <i class="bi bi-arrow-repeat me-2" />
                         New Game

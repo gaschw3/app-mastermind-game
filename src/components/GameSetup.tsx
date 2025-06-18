@@ -1,4 +1,5 @@
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
+import { decryptCodeString } from "../lib/cryptoUtil";
 import {
     GameSettings,
     GameState,
@@ -6,13 +7,9 @@ import {
     validateGameSettings,
 } from "../lib/data";
 
-/** Props for GameSetup component */
 interface GameSetupProps {
-    /** The game settings */
     settings: GameSettings;
-    /** Function to update the game settings */
     setSettings: (settings: GameSettings) => void;
-    /** Function to start the game */
     startGame: (gameState: GameState) => void;
 }
 
@@ -20,6 +17,35 @@ export function GameSetup(props: GameSetupProps) {
     const [slots, setSlots] = useState(props.settings.slots);
     const [slotMax, setSlotMax] = useState(props.settings.slotMax);
     const [slotsUnique, setSlotsUnique] = useState(props.settings.slotsUnique);
+    const [shareLink, setShareLink] = useState<string>("");
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const encryptedCode = params.get("code");
+        if (!encryptedCode) return;
+
+        decryptCodeString(encryptedCode).then((decoded) => {
+            if (!decoded) return;
+
+            const [digitsPart, slotMaxPart] = decoded.split(":");
+            if (!/^[\w ]+$/.test(digitsPart)) return;
+
+            const digits = digitsPart.split("").map(String);
+            const slotMax = parseInt(slotMaxPart, 10);
+            const slots = digits.length;
+            const slotsUnique = new Set(digits).size === slots;
+
+            const settings = { slots, slotMax, slotsUnique };
+            const errors = validateGameSettings(settings);
+
+            if (errors.valid) {
+                props.setSettings(settings);
+                const state = newGameState(settings);
+                state.solution = digits;
+                props.startGame(state);
+            }
+        });
+    }, []);
 
     const validationErrors = validateGameSettings({
         slots,
@@ -61,6 +87,7 @@ export function GameSetup(props: GameSetupProps) {
                             </div>
                         )}
                     </div>
+
                     <div class="col-md mb-5">
                         <label class="form-label" for="code-max">
                             Code Number Max
@@ -90,6 +117,7 @@ export function GameSetup(props: GameSetupProps) {
                             </div>
                         )}
                     </div>
+
                     <div class="col-md mb-5">
                         <label class="form-label" for="code-unique">
                             Code Slots Unique
@@ -105,10 +133,7 @@ export function GameSetup(props: GameSetupProps) {
                                         setSlotsUnique(e.currentTarget.checked);
                                     }}
                                 />
-                                <label
-                                    class="form-check-label"
-                                    for="code-unique"
-                                >
+                                <label class="form-check-label" for="code-unique">
                                     Unique
                                 </label>
                             </div>
@@ -118,21 +143,14 @@ export function GameSetup(props: GameSetupProps) {
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-end">
+
+                <div class="d-flex justify-content-between align-items-center">
                     <button
                         class="btn btn-primary btn-lg"
                         onClick={() => {
-                            props.setSettings({
-                                slots,
-                                slotMax,
-                                slotsUnique,
-                            });
+                            props.setSettings({ slots, slotMax, slotsUnique });
                             props.startGame(
-                                newGameState({
-                                    slots,
-                                    slotMax,
-                                    slotsUnique,
-                                })
+                                newGameState({ slots, slotMax, slotsUnique })
                             );
                         }}
                         disabled={!validationErrors.valid}
@@ -141,6 +159,18 @@ export function GameSetup(props: GameSetupProps) {
                         Start Game
                     </button>
                 </div>
+
+                {shareLink && (
+                    <div class="mt-3">
+                        <label class="form-label">Shareable Game Link</label>
+                        <input
+                            class="form-control"
+                            value={shareLink}
+                            readOnly
+                            onFocus={(e) => e.currentTarget.select()}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );

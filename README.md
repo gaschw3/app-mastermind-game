@@ -1,20 +1,27 @@
-# [Mastermind](https://mastermind-game.lixquid.com)
+# Hack.EXE
 
-An online version of the classic Mastermind game (also known as Bulls and Cows).
+An online version of a password cracking game somewhere between [Wordle](https://www.nytimes.com/games/wordle/index.html) and [Mastermind](https://en.wikipedia.org/wiki/Mastermind_(board_game)).
 
 Help is available in the game by clicking the Help button in the top right
 corner.
 
-https://mastermind-game.lixquid.com
+Originally cloned from [Lixquid](https://github.com/lixquid/app-mastermind-game) then altered somewhat to be usable for a D&D game.
 
 ## Features
 
 - Customizable game settings:
     - Length of the code
     - Maximum amount for each digit
-    - Allow duplicates or not
+- Encode string to create sharable link
+- Wordle-style highlighting
 
 ## Development
+
+- Needs cleanup on the GameSetup screen since it's no longer digit-based.
+- Could use a hinting system
+- More metadata encoded and used when generating share links
+    - Dovetails into hints - all digits vs alpha vs both, includes spaces or no, words vs random, etc.
+- Some kind of timer or guess limiting mechanic
 
 ### Prerequisites
 

@@ -30,10 +30,9 @@ export function isGameSettings(settings: unknown): settings is GameSettings {
 }
 
 /** Returns if the given {@link GameSettings} are valid */
-export function validateGameSettings(
-    settings: GameSettings
-): { valid: boolean } & { [k in keyof GameSettings]: string[] } {
-    const errors = {
+export function validateGameSettings(settings: GameSettings): 
+{ valid: boolean } & { [k in keyof GameSettings]: string[] } {
+    const errors: { valid: boolean } & { [k in keyof GameSettings]: string[] } = {
         slots: [],
         slotMax: [],
         slotsUnique: [],
@@ -62,13 +61,13 @@ export function validateGameSettings(
 export interface GameState {
     /** The solution to the game.
      *  Range: 1 <= n <= {@link GameSettings#slotMax}. */
-    solution: number[];
+    solution: string[];
     /** The current guess */
-    guess: number[];
+    guess: string[];
     /** Previous guesses */
     guesses: {
         /** The guess */
-        guess: number[];
+        guess: string[];
         /** The number of correct slots */
         correct: number;
         /** The number of slots with the correct value but in the wrong position */
@@ -89,28 +88,54 @@ export function newGameState(settings: GameSettings): GameState {
 }
 
 /** Returns a random solution for the given settings */
-export function randomSolution(settings: GameSettings): number[] {
+export function randomSolution(settings: GameSettings): string[] {
     if (settings.slotsUnique) {
         // If unique, generate a range of numbers, shuffle,
         // and take the first n
         const solution = Array.from(
             { length: settings.slotMax },
-            (_, i) => i + 1
+            (_, i) => String(i + 1)
         );
         for (let i = solution.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [solution[i], solution[j]] = [solution[j], solution[i]];
         }
-        console.log("Solution:", solution);
         return solution.slice(0, settings.slots);
     } else {
         // If not unique, generate n random numbers
-        const solution: number[] = [];
+        const solution: string[] = [];
         for (let i = 0; i < settings.slots; i++) {
-            solution.push(Math.floor(Math.random() * settings.slotMax) + 1);
+            solution.push(String(Math.floor(Math.random() * settings.slotMax) + 1));
         }
-        console.log("Solution:", solution);
         return solution;
     }
 }
 //#endregion GameState
+
+
+export type Feedback = "correct" | "misplaced" | "absent";
+
+export function getFeedback(guess: string[], solution: string[]): Feedback[] {
+    const feedback: Feedback[] = Array(guess.length).fill("absent");
+    const used = Array(solution.length).fill(false);
+
+    for (let i = 0; i < guess.length; i++) {
+        if (guess[i].toLowerCase() === solution[i].toLowerCase()) {
+            feedback[i] = "correct";
+            used[i] = true;
+        }
+    }
+
+    for (let i = 0; i < guess.length; i++) {
+        if (feedback[i] !== "absent") continue;
+        for (let j = 0; j < solution.length; j++) {
+            if (!used[j] && guess[i].toLowerCase() === solution[j].toLowerCase()) {
+                feedback[i] = "misplaced";
+                used[j] = true;
+                break;
+            }
+        }
+    }
+
+    return feedback;
+}

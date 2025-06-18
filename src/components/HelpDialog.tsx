@@ -21,12 +21,12 @@ export function HelpDialog(props: HelpDialogProps) {
                         </div>
                         <div class="modal-body">
                             <p>
-                                Mastermind is a game where you try to guess a
-                                secret code.
+                                Hack.EXE is a game where you try to crack a
+                                secret password.
                             </p>
                             <p>
-                                The code is made up of a series of numbers; each
-                                turn you attempt to guess the code. After each
+                                The password is made up of a series of characters; each
+                                turn you attempt to guess the password. After each
                                 guess you will be told:
                             </p>
                             <ul>
@@ -35,7 +35,7 @@ export function HelpDialog(props: HelpDialogProps) {
                                         <i class="bi bi-check-circle me-1" />
                                         Correct
                                     </span>
-                                    : How many numbers are correct and in the
+                                    : Highlighted characters are correct and in the
                                     correct position.
                                 </li>
                                 <li>
@@ -43,19 +43,19 @@ export function HelpDialog(props: HelpDialogProps) {
                                         <i class="bi bi-exclamation-circle me-1" />
                                         Misplaced
                                     </span>
-                                    : How many numbers are in the code, but in
+                                    : Highlighted characters are in the password, but in
                                     the wrong position.
                                 </li>
                                 <li>
-                                    <span class="text-danger">
+                                    <span>
                                         <i class="bi bi-x-circle me-1" />
                                         Incorrect
                                     </span>
-                                    : How many numbers are not in the code.
+                                    : Unhighlighted characters are not in the password.
                                 </li>
                             </ul>
                             <p class="mb-0">
-                                You win if you can guess the whole code!
+                                You win when you guess the whole code.
                             </p>
                         </div>
                     </div>

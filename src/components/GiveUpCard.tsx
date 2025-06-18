@@ -19,7 +19,7 @@ export function GiveUpCard(props: GiveUpCardProps) {
                             <div class="col">
                                 <div class="card">
                                     <div class="card-body text-center h1">
-                                        {slot}
+                                        {slot === " " ? <span class="text-muted">_</span> : slot.toUpperCase()}
                                     </div>
                                 </div>
                             </div>

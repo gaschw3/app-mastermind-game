@@ -9,15 +9,6 @@ import { GameState } from "./lib/data";
 import { useGameSettings } from "./lib/hooks";
 import { calculateGuess } from "./lib/util";
 
-/** Toggles bootstrap theme between light and dark */
-function toggleDarkMode() {
-    const html = document.querySelector("html");
-    if (html !== null) {
-        html.dataset.bsTheme =
-            html.dataset.bsTheme === "dark" ? "light" : "dark";
-    }
-}
-
 export function App() {
     const [settings, setSettings] = useGameSettings();
     // `null` means the game hasn't started yet.
@@ -27,15 +18,8 @@ export function App() {
     return (
         <div class="container mx-auto my-5">
             <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap">
-                <h1>Mastermind</h1>
+                <h1>Hack.EXE</h1>
                 <div>
-                    <button
-                        class="btn btn-outline-secondary me-2"
-                        onClick={toggleDarkMode}
-                        title="Toggle dark mode"
-                    >
-                        <i class="bi bi-moon-fill" />
-                    </button>
                     <button
                         class="btn btn-info me-2"
                         onClick={() => setShowHelp(true)}
@@ -43,13 +27,6 @@ export function App() {
                         <i class="bi bi-question-circle me-2" />
                         Help
                     </button>
-                    <a
-                        href="https://lixquid.com"
-                        class="btn btn-outline-primary float-end"
-                    >
-                        <i class="bi bi-box-arrow-up-right me-2" />
-                        lixquid.com
-                    </a>
                 </div>
             </div>
             {gameState === null && (
@@ -84,6 +61,7 @@ export function App() {
                             });
                         }}
                         disabled={gameState.ended !== undefined}
+                        solution={gameState.solution}
                     />
                     {gameState.ended === "won" && (
                         <VictoryCard newGame={() => setGameState(null)} />
@@ -103,17 +81,12 @@ export function App() {
                                 guess={guess}
                                 guessNumber={gameState.guesses.length - i}
                                 key={i}
+                                solution={gameState.solution}
                             />
                         ))}
                 </>
             )}
             {showHelp && <HelpDialog close={() => setShowHelp(false)} />}
-            <div class="mt-5 text-end">
-                <a href="https://github.com/lixquid/app-mastermind-game">
-                    <i class="bi bi-box-arrow-up-right me-2" />
-                    Source code
-                </a>
-            </div>
         </div>
     );
 }
