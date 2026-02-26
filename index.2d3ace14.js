@@ -562,7 +562,7 @@ var _preact = require("preact");
 var _app = require("./App");
 var _linkGenerator = require("./components/LinkGenerator");
 const path = window.location.pathname;
-if (path === "/debug") (0, _preact.render)(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _linkGenerator.LinkGenerator), {}, void 0, false, {
+if (path.endsWith("/debug")) (0, _preact.render)(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _linkGenerator.LinkGenerator), {}, void 0, false, {
     fileName: "src/index.tsx",
     lineNumber: 7,
     columnNumber: 12
