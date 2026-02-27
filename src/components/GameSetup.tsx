@@ -7,6 +7,23 @@ import {
     validateGameSettings,
 } from "../lib/data";
 
+type CharacterSet = "numeric" | "alpha" | "alphanumeric" | "full-keyboard";
+
+const CHARACTER_SET_MAP: Record<CharacterSet, number> = {
+    "numeric": 10,        // 0-9
+    "alpha": 26,          // A-Z
+    "alphanumeric": 36,   // 0-9, A-Z
+    "full-keyboard": 94,  // Full keyboard characters
+};
+
+const slotMaxToCharacterSet = (slotMax: number): CharacterSet => {
+    if (slotMax === 10) return "numeric";
+    if (slotMax === 26) return "alpha";
+    if (slotMax === 36) return "alphanumeric";
+    if (slotMax === 94) return "full-keyboard";
+    return "numeric"; // Default
+};
+
 interface GameSetupProps {
     settings: GameSettings;
     setSettings: (settings: GameSettings) => void;
@@ -16,8 +33,16 @@ interface GameSetupProps {
 export function GameSetup(props: GameSetupProps) {
     const [slots, setSlots] = useState(props.settings.slots);
     const [slotMax, setSlotMax] = useState(props.settings.slotMax);
+    const [characterSet, setCharacterSet] = useState<CharacterSet>(
+        slotMaxToCharacterSet(props.settings.slotMax)
+    );
     const [slotsUnique, setSlotsUnique] = useState(props.settings.slotsUnique);
     const [shareLink, setShareLink] = useState<string>("");
+
+    const handleCharacterSetChange = (newCharSet: CharacterSet) => {
+        setCharacterSet(newCharSet);
+        setSlotMax(CHARACTER_SET_MAP[newCharSet]);
+    };
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -90,26 +115,27 @@ export function GameSetup(props: GameSetupProps) {
 
                     <div class="col-md mb-5">
                         <label class="form-label" for="code-max">
-                            Code Number Max
+                            Code Character Set
                         </label>
-                        <input
+                        <select
                             class={`form-control${
                                 validationErrors.slotMax.length > 0
                                     ? " is-invalid"
                                     : ""
                             }`}
-                            type="number"
                             id="code-max"
-                            min="2"
-                            max="10"
-                            step="1"
-                            value={slotMax}
-                            onInput={(e) => {
-                                setSlotMax(parseInt(e.currentTarget.value));
+                            value={characterSet}
+                            onChange={(e) => {
+                                handleCharacterSetChange(e.currentTarget.value as CharacterSet);
                             }}
-                        />
+                        >
+                            <option value="numeric">Numeric (0-9)</option>
+                            <option value="alpha">Alphabetic (A-Z)</option>
+                            <option value="alphanumeric">Alphanumeric (0-9, A-Z)</option>
+                            <option value="full-keyboard">Full Keyboard</option>
+                        </select>
                         <div class="form-text">
-                            The maximum number each slot in the code can be.
+                            The character set available for each slot in the code.
                         </div>
                         {validationErrors.slotMax.length > 0 && (
                             <div class="invalid-feedback">

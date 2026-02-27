@@ -14,7 +14,7 @@ export function LinkGenerator() {
         }
 
         const encrypted = await encryptCodeString(codeInput);
-        const fullLink = `${window.location.origin}?code=${encodeURIComponent(encrypted)}`;
+        const fullLink = `?code=${encodeURIComponent(encrypted)}`;
         setLink(fullLink);
         setError(null);
     };

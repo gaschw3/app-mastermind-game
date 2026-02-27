@@ -9,8 +9,8 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "start": "parcel src/index.html",
-        "build": "parcel build src/index.html --public-url /app-mastermind-game/",
+        "start": "parcel src/index.html src/map.html src/assets/*",
+        "build": "parcel build src/index.html src/map.html src/assets/* --public-url /app-mastermind-game/",
         "predeploy": "npm run build",
         "deploy": "gh-pages -d dist"
     },

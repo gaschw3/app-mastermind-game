@@ -87,25 +87,48 @@ export function newGameState(settings: GameSettings): GameState {
     };
 }
 
+/** Generates the character set array based on slotMax */
+export function getCharacterSet(slotMax: number): string[] {
+    if (slotMax === 10) {
+        // Numeric: 0-9
+        return Array.from({ length: 10 }, (_, i) => String(i));
+    } else if (slotMax === 26) {
+        // Alpha: A-Z
+        return Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));
+    } else if (slotMax === 36) {
+        // Alphanumeric: 0-9, A-Z
+        const chars: string[] = [];
+        for (let i = 0; i < 10; i++) chars.push(String(i));
+        for (let i = 0; i < 26; i++) chars.push(String.fromCharCode(65 + i));
+        return chars;
+    } else if (slotMax === 94) {
+        // Full keyboard: printable ASCII characters (space through ~)
+        const chars: string[] = [];
+        for (let i = 32; i <= 126; i++) chars.push(String.fromCharCode(i));
+        return chars;
+    }
+    // Default fallback to numeric
+    return Array.from({ length: slotMax }, (_, i) => String(i));
+}
+
 /** Returns a random solution for the given settings */
 export function randomSolution(settings: GameSettings): string[] {
+    const charSet = getCharacterSet(settings.slotMax);
+    
     if (settings.slotsUnique) {
-        // If unique, generate a range of numbers, shuffle,
-        // and take the first n
-        const solution = Array.from(
-            { length: settings.slotMax },
-            (_, i) => String(i + 1)
-        );
+        // If unique, shuffle the character set and take the first n
+        const solution = [...charSet];
         for (let i = solution.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [solution[i], solution[j]] = [solution[j], solution[i]];
         }
         return solution.slice(0, settings.slots);
     } else {
-        // If not unique, generate n random numbers
+        // If not unique, generate n random characters from the set
         const solution: string[] = [];
         for (let i = 0; i < settings.slots; i++) {
-            solution.push(String(Math.floor(Math.random() * settings.slotMax) + 1));
+            const randomIndex = Math.floor(Math.random() * charSet.length);
+            solution.push(charSet[randomIndex]);
         }
         return solution;
     }

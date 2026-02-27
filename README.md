@@ -11,13 +11,13 @@ Originally cloned from [Lixquid](https://github.com/lixquid/app-mastermind-game)
 
 - Customizable game settings:
     - Length of the code
-    - Maximum amount for each digit
+    - Types of puzzles (#, A-Z, both, full keyboard)
+    - Uniqueness constraint
 - Encode string to create sharable link (visit `...#encode` for the secret encoder shortcut)
 - Wordle-style highlighting
 
 ## Development
 
-- Needs cleanup on the GameSetup screen since it's no longer digit-based.
 - Could use a hinting system
 - More metadata encoded and used when generating share links
     - Dovetails into hints - all digits vs alpha vs both, includes spaces or no, words vs random, etc.
@@ -43,4 +43,6 @@ Changes to the source files will be automatically reloaded in the browser.
 1. Remove the `dist` folder: `rm -rf dist`
 2. Build the project: `npm run predeploy`
 3. The production files will be in the `dist` folder
-4. Build using gh-pages with `npm run deploy`, should deploy to [https://gaschw3.github.io/app-mastermind-game/](gaschw3 github pages)
+4. Build using gh-pages with `npm run deploy`, deploys to [https://gaschw3.github.io/app-mastermind-game/](github pages) if you have it set up
+
+Potential weirdness around `--public-url /app-mastermind-game/` in package.json depending on how it's set up compared to the way I do mine.

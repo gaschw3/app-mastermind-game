@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <head>
+        <meta charset="UTF-8" />
+        <title>JUN_REACTOR.HOLO !! CORRUPT !!</title>
+        <link rel="icon" href="./assets/favicon.png" type="image/png" />
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000;
+    display: flex;
+    min-height: 80vh;
+    font-family: 'Courier New', monospace;
+    overflow: scroll;
+  }
+
+  .holo-container {
+    position: relative;
+    width: 900px;
+    height: 1260px;
+  }
+
+  .holo-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(255,30,30,0.04) 2px, rgba(255,30,30,0.04) 4px
+    );
+    pointer-events: none;
+    z-index: 100;
+    animation: scanlines 4s linear infinite;
+  }
+
+  .holo-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(180,0,0,0.06);
+    pointer-events: none;
+    z-index: 101;
+    animation: flicker 2s infinite;
+  }
+
+  @keyframes scanlines {
+    0%   { background-position: 0 0; }
+    100% { background-position: 0 100px; }
+  }
+
+  @keyframes flicker {
+    0%,100% { opacity:1; }
+    11%  { opacity:0.4; transform:translateX(2px); }
+    12%  { opacity:1; transform:none; }
+    41%  { opacity:0.6; transform:translateX(-3px) scaleY(0.99); }
+    42%  { opacity:1; transform:none; }
+    71%  { opacity:0.3; transform:translateX(1px); }
+    73%  { opacity:1; transform:none; }
+  }
+
+  .glitch-line {
+    position: absolute; left:0; right:0; height:2px;
+    background: rgba(255,0,0,0.5);
+    animation: glitch-move 4s infinite;
+    z-index:102; pointer-events:none;
+  }
+  .glitch-line:nth-child(2) { animation-delay:1.1s; animation-duration:2.3s; opacity:0.7;}
+  .glitch-line:nth-child(3) { animation-delay:0.6s; animation-duration:4s; opacity:0.4; height:1px;}
+
+  @keyframes glitch-move {
+    0%   { top:-10px; opacity:0; }
+    5%   { opacity:1; }
+    95%  { opacity:1; }
+    100% { top:1250px; opacity:0; }
+  }
+
+  svg { width:100%; height:100%;
+    filter: drop-shadow(0 0 10px rgba(255,50,50,0.7)) drop-shadow(0 0 3px rgba(0,255,120,0.3));
+  }
+
+  .holo-label    { font-size:8px;  fill:rgba(0,255,140,0.9);  font-family:'Courier New',monospace; text-anchor:middle; letter-spacing:0.05em; }
+  .holo-label-sm { font-size:6px;  fill:rgba(0,255,120,0.7);  font-family:'Courier New',monospace; text-anchor:middle; }
+  .err-label     { font-size:7px;  fill:rgba(255,60,60,0.95); font-family:'Courier New',monospace; text-anchor:middle; letter-spacing:0.08em; }
+  .warn-label     { font-size:7px;  fill:rgba(255,160,0,0.95); font-family:'Courier New',monospace; text-anchor:middle; letter-spacing:0.08em; }
+  .big {font-size:8px; letter-spacing:0.05em;  }
+
+  .holo-ui {
+    position:absolute; top:10px; left:0; right:0;
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding:8px 12px;
+    color:rgba(255,80,80,0.95); font-size:12px; letter-spacing:0.15em;
+    text-transform:uppercase; z-index:50; pointer-events:none;
+  }
+
+  .warn-blink { display:inline-block; animation:warnblink 0.8s infinite; color:#ff2020; font-weight:bold; }
+  @keyframes warnblink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+  .clock { margin-right: 90px; font-size:13px; color:rgba(255,120,0,0.9); letter-spacing:0.15em; }
+
+  .alert-banner {
+    position:absolute; bottom:15px; left:50%; transform:translateX(-50%);
+    color:rgba(255,40,40,0.9); font-size:12px; letter-spacing:0.2em;
+    text-transform:uppercase; animation:warnblink 1.2s infinite;
+    z-index:50; pointer-events:none; white-space:nowrap;
+  }
+</style>
+</head>
+<body>
+<div class="holo-container">
+  <div class="glitch-line"></div>
+  <div class="glitch-line"></div>
+  <div class="glitch-line"></div>
+
+  <div class="holo-ui">
+    <div><span class="warn-blink">⚠ HOSTILES DETECTED</span></div>
+    <div class="clock" id="clock">00:00:00</div>
+    <div><span class="warn-blink">SYS FAILURE</span></div>
+  </div>
+
+  <div class="alert-banner">!! CRITICAL — POWER SPINE COMPROMISED — ALL SECTORS AT RISK !!</div>
+
+  <svg viewBox="0 0 420 580" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="glow2" x="-100%" y="-100%" width="300%" height="300%">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="redglow" x="-100%" y="-100%" width="300%" height="300%">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="strongglow">
+        <feGaussianBlur stdDeviation="2.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+        <path d="M10 0L0 0 0 10" fill="none" stroke="rgba(180,50,50,0.13)" stroke-width="0.3"/>
+      </pattern>
+      <pattern id="static" width="4" height="4" patternUnits="userSpaceOnUse">
+        <rect width="4" height="4" fill="none"/>
+        <rect x="0" y="0" width="1" height="1" fill="rgba(255,0,0,0.15)"/>
+        <rect x="2" y="2" width="1" height="1" fill="rgba(255,0,0,0.10)"/>
+        <rect x="1" y="3" width="1" height="1" fill="rgba(200,0,0,0.08)"/>
+      </pattern>
+      <radialGradient id="corruptGrad" cx="50%" cy="50%" r="60%">
+        <stop offset="0%"   stop-color="rgba(180,0,0,0.12)"/>
+        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+      </radialGradient>
+    </defs>
+
+    <!-- ── BACKGROUND ─────────────────────────────────────── -->
+    <rect width="420" height="580" fill="#020a03"/>
+    <rect width="420" height="580" fill="url(#grid)"/>
+    <rect width="420" height="580" fill="url(#static)" opacity="0.5">
+      <animate attributeName="opacity" values="0.4;0.8;0.5;0.7;0.4" dur="1.5s" repeatCount="indefinite"/>
+    </rect>
+    <rect width="420" height="580" fill="url(#corruptGrad)"/>
+
+    <!-- ── POWER SPINE  x=210, y=40 to y=545 ─────────────── -->
+    <line x1="210" y1="40"  x2="210" y2="545" stroke="rgba(255,0,0,0.18)"   stroke-width="8"/>
+    <line x1="210" y1="40"  x2="210" y2="545" stroke="rgba(220,30,30,0.85)" stroke-width="1.5" filter="url(#redglow)"/>
+    <circle r="2.5" fill="rgba(255,60,60,0.95)" filter="url(#redglow)">
+      <animateMotion dur="1.2s" repeatCount="indefinite"><mpath href="#spineD"/></animateMotion>
+    </circle>
+    <circle r="1.5" fill="rgba(255,150,0,0.8)" filter="url(#glow)">
+      <animateMotion dur="0.8s" repeatCount="indefinite" begin="0.4s"><mpath href="#spineU"/></animateMotion>
+    </circle>
+    <path id="spineD" d="M210,40 L210,545" fill="none"/>
+    <path id="spineU" d="M210,545 L210,40" fill="none"/>
+    <line x1="206" y1="200" x2="214" y2="207" stroke="rgba(255,100,0,0.9)" stroke-width="1" filter="url(#glow)"/>
+    <line x1="207" y1="340" x2="213" y2="347" stroke="rgba(255,100,0,0.9)" stroke-width="1" filter="url(#glow)"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         COMMAND RING   cx=210 cy=100 r=42
+         ═══════════════════════════════════════════════════════ -->
+    <circle cx="210" cy="80" r="42" fill="none" stroke-width="1.5" stroke-dasharray="6,3" filter="url(#glow)">
+      <animate attributeName="stroke" values="rgba(0,255,120,0.6);rgba(220,30,30,0.8);rgba(0,255,120,0.6)" dur="3s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="rotate" from="0 210 80" to="360 210 80" dur="18s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="210" cy="80" r="27" fill="rgba(30,0,10,0.85)" stroke="rgba(200,50,50,0.8)" stroke-width="1" filter="url(#glow)"/>
+    <rect x="200" y="70" width="20" height="20" fill="rgba(60,0,20,0.9)" stroke-width="0.8" filter="url(#glow)">
+      <animate attributeName="stroke" values="rgba(255,60,60,0.9);rgba(0,220,255,0.5);rgba(255,60,60,0.9)" dur="1.5s" repeatCount="indefinite"/>
+    </rect>
+    <!-- Red crosshair on CMD -->
+    <line x1="196" y1="80" x2="224" y2="80" stroke="rgba(255,30,30,0.95)" stroke-width="1.2" filter="url(#redglow)"/>
+    <line x1="210" y1="66"  x2="210" y2="94" stroke="rgba(255,30,30,0.95)" stroke-width="1.2" filter="url(#redglow)"/>
+    <!-- Notch top -->
+    <path d="M196,38 A42,22 0 0,1 224,38" fill="none" stroke="rgba(0,255,120,0.3)" stroke-width="3"/>
+    <!-- Corrupt diamond -->
+    <polygon points="230,44 234,48 230,52 226,48" fill="rgba(255,0,0,0.6)" stroke="rgba(255,80,80,0.9)" stroke-width="0.8" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.8;0.2;0.8" dur="1s" repeatCount="indefinite"/>
+    </polygon>
+    <text x="210" y="131" class="warn-label big">COMMAND CENTER</text>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SUPPORT WING  x=15 y=68 w=80 h=62  (level with cmd)
+         Connector: right edge → cmd ring left
+         ═══════════════════════════════════════════════════════ -->
+    <rect x="15" y="63" width="80" height="62" rx="2" fill="rgba(0,20,5,0.75)" stroke="rgba(0,220,100,0.5)" stroke-width="0.8" filter="url(#glow)"/>
+    <line x1="15"  y1="93" x2="95"  y2="93" stroke="rgba(0,220,100,0.25)" stroke-width="0.5"/>
+    <line x1="55"  y1="63" x2="55"  y2="125" stroke="rgba(0,220,100,0.25)" stroke-width="0.5"/>
+    <!-- Medical cross -->
+    <line x1="73" y1="71" x2="73" y2="85" stroke="rgba(255,80,80,0.8)" stroke-width="1.5"/>
+    <line x1="66" y1="78" x2="80" y2="78" stroke="rgba(255,80,80,0.8)" stroke-width="1.5"/>
+    <text x="37"  y="81" class="err-label">TRAUMA</text>
+    <text x="55"  y="100" class="holo-label-sm">SUPPORT</text>
+    <text x="55"  y="108" class="holo-label-sm">OFFICES</text>
+    <text x="55" y="56" class="holo-label">MEDICAL</text>
+    <!-- Connector to cmd ring -->
+    <line x1="95" y1="93" x2="168" y2="93" stroke="rgba(0,220,100,0.4)" stroke-width="0.9" stroke-dasharray="4,2"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         HARBOR  x=320 y=60 w=85 h=72
+         Connected via corridor to main ring right side
+         ═══════════════════════════════════════════════════════ -->
+    <rect x="320" y="60" width="85" height="72" rx="3" fill="rgba(0,40,20,0.5)" stroke="rgba(0,200,80,0.5)" stroke-width="0.8"/>
+    <rect x="344" y="68" width="61" height="64" fill="rgba(0,120,40,0.4)" stroke="rgba(0,200,80,0.4)" stroke-width="0.5">
+      <animate attributeName="fill" values="rgba(0,120,40,0.4);rgba(0,160,60,0.5);rgba(0,120,40,0.4)" dur="3s" repeatCount="indefinite"/>
+    </rect>
+    <!-- Shark icon -->
+     <rect x="378" y="70" width="20" height="20" fill="rgba(255,120,40,0.2)" stroke="rgba(0,255,255,0.8)" stroke-width="0.5">
+      <animate attributeName="fill" values="rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,255,255,0.9);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,255,255,0.9);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);rgba(0,120,40,0.4);" dur="4s" repeatCount="indefinite"/>
+     </rect>
+    <!-- Dock rails -->
+    <line x1="322" y1="85" x2="344" y2="85" stroke="rgba(0,220,100,0.5)" stroke-width="0.8"/>
+    <line x1="322" y1="100" x2="344" y2="100" stroke="rgba(0,220,100,0.5)" stroke-width="0.8"/>
+    <text x="332" y="68" class="holo-label-sm">LABS</text>
+    <text x="362" y="53" class="holo-label">RESEARCH α</text>
+    <!-- Corridor from harbor bottom-left corner down to main ring (cx=292,cy=225) -->
+    <line x1="278" y1="185" x2="336" y2="132" stroke="rgba(0,220,100,0.4)" stroke-width="0.9" stroke-dasharray="4,2"></line>
+
+    <!-- ═══════════════════════════════════════════════════════
+         MAIN OPERATIONS RING   cx=210 cy=225 r=82
+         ═══════════════════════════════════════════════════════ -->
+    <circle cx="210" cy="225" r="82" fill="none" stroke-width="3">
+      <animate attributeName="stroke" values="rgba(200,20,20,0.4);rgba(0,255,120,0.15);rgba(200,20,20,0.5)" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="210" cy="225" r="82" fill="none" stroke-width="0.8" stroke-dasharray="260,10" filter="url(#glow)">
+      <animate attributeName="stroke" values="rgba(220,30,30,0.7);rgba(0,255,120,0.4);rgba(220,30,30,0.8)" dur="2.5s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="rotate" from="0 210 225" to="-360 210 225" dur="22s" repeatCount="indefinite"/>
+    </circle>
+    <!-- Caution arc upper right -->
+    <path d="M255,157 A82,82 0 0,1 290,220" fill="none" stroke="rgba(255,220,0,0.7)" stroke-width="3" stroke-dasharray="5,3"/>
+    <!-- Middle ring -->
+    <circle cx="210" cy="225" r="60" fill="rgba(20,0,10,0.88)" stroke-width="1" filter="url(#glow)">
+      <animate attributeName="stroke" values="rgba(220,30,30,0.7);rgba(0,220,100,0.4);rgba(220,30,30,0.8)" dur="1.8s" repeatCount="indefinite"/>
+    </circle>
+    <!-- Inner ring -->
+    <circle cx="210" cy="225" r="33" fill="rgba(30,0,15,0.95)" stroke-width="1.2" filter="url(#glow)">
+      <animate attributeName="stroke" values="rgba(255,30,30,0.9);rgba(0,220,255,0.3);rgba(255,30,30,0.9)" dur="0.9s" repeatCount="indefinite"/>
+    </circle>
+    <!-- Large red crosshair -->
+    <line x1="184" y1="225" x2="236" y2="225" stroke="rgba(255,20,20,0.95)" stroke-width="1.8" filter="url(#redglow)"/>
+    <line x1="210" y1="199" x2="210" y2="251" stroke="rgba(255,20,20,0.95)" stroke-width="1.8" filter="url(#redglow)"/>
+    <circle cx="210" cy="225" r="13" fill="none" stroke="rgba(255,30,30,0.7)" stroke-width="1.2" filter="url(#redglow)">
+      <animate attributeName="r" values="11;16;11" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <g stroke="rgba(255,50,50,0.8)" stroke-width="0.8" filter="url(#glow)">
+      <line x1="184" y1="219" x2="184" y2="231"/>
+      <line x1="236" y1="219" x2="236" y2="231"/>
+      <line x1="204" y1="199" x2="216" y2="199"/>
+      <line x1="204" y1="251" x2="216" y2="251"/>
+    </g>
+    <!-- Spinning reactor triangles -->
+    <polygon points="210,202 219,218 201,218" fill="rgba(180,0,30,0.4)" stroke="rgba(255,50,50,0.7)" stroke-width="0.8">
+      <animate attributeName="fill" values="rgba(180,0,30,0.4);rgba(255,80,0,0.3);rgba(180,0,30,0.4)" dur="1.5s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="rotate" from="0 210 225" to="360 210 225" dur="5s" repeatCount="indefinite"/>
+    </polygon>
+    <polygon points="210,248 219,232 201,232" fill="rgba(180,0,30,0.4)" stroke="rgba(255,50,50,0.7)" stroke-width="0.8">
+      <animateTransform attributeName="transform" type="rotate" from="0 210 225" to="360 210 225" dur="5s" repeatCount="indefinite"/>
+    </polygon>
+    <!-- Core pulse -->
+    <circle cx="210" cy="225" r="9" filter="url(#redglow)">
+      <animate attributeName="fill" values="rgba(200,0,0,0.8);rgba(255,100,0,0.9);rgba(200,0,0,0.8)" dur="0.6s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="8;11;8" dur="0.6s" repeatCount="indefinite"/>
+    </circle>
+    <text x="210" y="318" class="err-label big">⚠ MAIN HALL</text>
+    <!-- Tick marks -->
+    <g stroke="rgba(180,50,50,0.5)" stroke-width="0.8">
+      <line x1="210" y1="143" x2="210" y2="153"/>
+      <line x1="210" y1="297" x2="210" y2="307"/>
+      <line x1="128" y1="225" x2="138" y2="225"/>
+      <line x1="282" y1="225" x2="292" y2="225"/>
+    </g>
+
+    <!-- ═══════════════════════════════════════════════════════
+         VEHICLE BAY — left side
+         ═══════════════════════════════════════════════════════ -->
+    <path d="M32,138 Q22,158 24,178 Q22,198 32,214 L84,214 L84,138 Z"
+          fill="rgba(15,5,20,0.8)" stroke="rgba(0,220,100,0.5)" stroke-width="0.8" filter="url(#glow)"/>
+    <rect x="40" y="146" width="36" height="10" rx="1" fill="rgba(80,20,20,0.5)" stroke="rgba(200,50,50,0.6)" stroke-width="0.5"/>
+    <rect x="40" y="160" width="36" height="10" rx="1" fill="rgba(80,20,20,0.5)" stroke="rgba(200,50,50,0.6)" stroke-width="0.5"/>
+    <rect x="40" y="174" width="36" height="10" rx="1" fill="rgba(80,20,20,0.5)" stroke="rgba(200,50,50,0.6)" stroke-width="0.5"/>
+    <rect x="40" y="188" width="36" height="10" rx="1" fill="rgba(80,20,20,0.5)"  stroke="rgba(200,50,50,0.6)" stroke-width="0.5"/>
+    <text x="58" y="205" class="holo-label-sm">ESCAPE</text>
+    <text x="58" y="212" class="holo-label-sm">PODS</text>
+    <!-- Connector right edge → main ring left -->
+    <line x1="84" y1="178" x2="128" y2="200" stroke="rgba(200,50,50,0.5)" stroke-width="1" stroke-dasharray="3,2"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         WEST WING / BREACH  x=10 y=244 w=88 h=90
+         Own room with breach circle + rad symbol + panels
+         ═══════════════════════════════════════════════════════ -->
+    <rect x="10" y="244" width="88" height="90" rx="3"
+          fill="rgba(25,5,5,0.85)" stroke-width="1.2" filter="url(#glow)">
+      <animate attributeName="stroke" values="rgba(255,220,0,0.8);rgba(255,50,50,0.9);rgba(255,220,0,0.8)" dur="1s" repeatCount="indefinite"/>
+    </rect>
+    <!-- Internal grid -->
+    <line x1="10"  y1="284" x2="98"  y2="284" stroke="rgba(255,100,0,0.25)" stroke-width="0.6"/>
+    <line x1="54"  y1="244" x2="54"  y2="334" stroke="rgba(255,100,0,0.25)" stroke-width="0.6"/>
+    <!-- Breach circle — upper-left cell -->
+    <circle cx="32" cy="264" r="17" fill="rgba(30,5,5,0.85)" stroke-width="1.4" stroke-dasharray="4,2" filter="url(#glow)">
+      <animate attributeName="stroke" values="rgba(255,220,0,0.8);rgba(255,50,50,0.9);rgba(255,220,0,0.8)" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <line x1="22" y1="254" x2="42" y2="274" stroke="rgba(255,40,40,0.9)" stroke-width="1.5" filter="url(#glow)"/>
+    <line x1="42" y1="254" x2="22" y2="274" stroke="rgba(255,40,40,0.9)" stroke-width="1.5" filter="url(#glow)"/>
+    <!-- Rad symbol — upper-right cell -->
+    <circle cx="76" cy="259" r="13" fill="rgba(20,5,5,0.8)" stroke-width="1" filter="url(#glow)">
+      <animate attributeName="stroke" values="rgba(80,200,80,0.6);rgba(255,50,50,0.8);rgba(80,200,80,0.6)" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <!-- Lower-left status panel -->
+    <rect x="14"  y="289" width="36" height="14" rx="1" fill="rgba(40,5,5,0.8)"  stroke="rgba(255,50,50,0.5)" stroke-width="0.5"/>
+    <!-- Lower-right status panel -->
+    <rect x="58"  y="289" width="36" height="14" rx="1" fill="rgba(40,10,5,0.8)" stroke="rgba(255,120,0,0.5)" stroke-width="0.5"/>
+    <!-- Bottom full-width panel -->
+    <rect x="14"  y="308" width="80" height="20" rx="1" fill="rgba(10,15,10,0.8)" stroke="rgba(0,180,80,0.35)" stroke-width="0.5"/>
+    <!-- Cell labels -->
+    <text x="32"  y="277" class="err-label"     style="font-size:5.5px">CELL</text>
+    <text x="76"  y="280" class="holo-label-sm"              >STORAGE</text>
+    <text x="32"  y="300" class="err-label"     font-size="5">OFFLINE</text>
+    <text x="76"  y="300" class="warn-label"              >BREACH</text>
+    <text x="54"  y="322" class="holo-label-sm"              >VAULT</text>
+    <text x="54"  y="238" class="err-label big"                  >⚠ RESEARCH β</text>
+    <!-- Connector: right edge → main ring left -->
+    <line x1="98" y1="280" x2="128" y2="252" stroke="rgba(255,80,0,0.45)" stroke-width="1" stroke-dasharray="3,2"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         EAST WING  x=338 y=185 w=72 h=82
+         ═══════════════════════════════════════════════════════ -->
+    <rect x="338" y="185" width="72" height="82" rx="2"
+          fill="rgba(15,5,10,0.8)" stroke-width="0.8" filter="url(#glow)">
+      <animate attributeName="stroke" values="rgba(0,220,100,0.5);rgba(200,50,50,0.5);rgba(0,220,100,0.5)" dur="3s" repeatCount="indefinite"/>
+    </rect>
+    <line x1="338" y1="225" x2="410" y2="225" stroke="rgba(0,220,100,0.2)" stroke-width="0.5"/>
+    <line x1="374" y1="185" x2="374" y2="267" stroke="rgba(0,220,100,0.2)" stroke-width="0.5"/>
+    <!-- Corrupted red indicator -->
+    <rect x="380" y="233" width="23" height="8" fill="rgba(255,50,0,0.7)" stroke="rgba(255,80,0,0.9)" stroke-width="0.5">
+      <animate attributeName="fill" values="rgba(255,50,0,0.7);rgba(255,180,0,0.5);rgba(255,50,0,0.7)" dur="0.7s" repeatCount="indefinite"/>
+    </rect>
+    <!-- Crosshair on armory -->
+    <line x1="349" y1="205" x2="361" y2="205" stroke="rgba(255,30,30,0.8)" stroke-width="0.8" filter="url(#glow)"/>
+    <line x1="355" y1="199" x2="355" y2="211" stroke="rgba(255,30,30,0.8)" stroke-width="0.8" filter="url(#glow)"/>
+    <text x="356" y="218" class="holo-label-sm">ARMORY</text>
+    <text x="392" y="218" class="holo-label-sm">COMMS</text>
+    <text x="392" y="248" class="holo-label-sm">SECURITY</text>
+    <text x="374" y="178" class="holo-label">EAST WING</text>
+    <!-- Connector: left edge → main ring right -->
+    <line x1="338" y1="225" x2="292" y2="225" stroke="rgba(200,50,50,0.5)" stroke-width="1" stroke-dasharray="3,2"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         CONTAINMENT DOME   cx=210 cy=390 r=46
+         ═══════════════════════════════════════════════════════ -->
+    <circle cx="210" cy="390" r="46" fill="rgba(0,10,5,0.92)" stroke-width="1.2" filter="url(#glow)">
+      <animate attributeName="stroke" values="rgba(0,190,80,0.6);rgba(200,30,30,0.5);rgba(0,190,80,0.6)" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="210" cy="390" r="39" fill="rgba(0,30,15,0.35)" stroke="rgba(0,160,60,0.4)" stroke-width="0.8"/>
+    <circle cx="210" cy="390" r="23" fill="rgba(150,255,180,0.05)" stroke="rgba(150,255,180,0.5)" stroke-width="0.8" filter="url(#glow)"/>
+    <line x1="187" y1="390" x2="233" y2="390" stroke="rgba(150,255,180,0.4)" stroke-width="0.5"/>
+    <line x1="210" y1="367" x2="210" y2="413" stroke="rgba(150,255,180,0.4)" stroke-width="0.5"/>
+    <line x1="194" y1="374" x2="226" y2="406" stroke="rgba(150,255,180,0.3)" stroke-width="0.5"/>
+    <line x1="226" y1="374" x2="194" y2="406" stroke="rgba(150,255,180,0.3)" stroke-width="0.5"/>
+    <circle cx="210" cy="390" r="23" filter="url(#glow2)">
+      <animate attributeName="fill" values="rgba(150,255,180,0.06);rgba(255,50,50,0.08);rgba(150,255,180,0.06)" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <!-- 4 monitor stations -->
+    <rect x="172" y="364" width="7" height="9" rx="0.5" fill="rgba(0,40,20,0.8)"  stroke="rgba(0,190,80,0.6)"  stroke-width="0.5"/>
+    <rect x="241" y="364" width="7" height="9" rx="0.5" fill="rgba(60,0,0,0.9)"   stroke="rgba(255,50,50,0.7)"  stroke-width="0.5"/>
+    <rect x="172" y="406" width="7" height="9" rx="0.5" fill="rgba(60,0,0,0.9)"   stroke="rgba(255,50,50,0.7)"  stroke-width="0.5"/>
+    <rect x="241" y="406" width="7" height="9" rx="0.5" fill="rgba(0,40,20,0.8)"  stroke="rgba(0,190,80,0.6)"  stroke-width="0.5"/>
+    <!-- Crosshair at spine/dome top junction -->
+    <line x1="204" y1="344" x2="216" y2="344" stroke="rgba(255,30,30,0.9)" stroke-width="1" filter="url(#redglow)"/>
+    <line x1="210" y1="338" x2="210" y2="350" stroke="rgba(255,30,30,0.9)" stroke-width="1" filter="url(#redglow)"/>
+    <text x="210" y="447" class="warn-label big">CONTAINMENT DOME</text>
+
+    <!-- ═══════════════════════════════════════════════════════
+         SERVER ROOM  left lower
+         ═══════════════════════════════════════════════════════ -->
+    <rect x="10" y="360" width="108" height="72" rx="2" fill="rgba(0,15,5,0.85)" stroke="rgba(0,220,100,0.5)" stroke-width="0.8" filter="url(#glow)"/>
+    <!-- Server rack units — 4 columns of stacked blades -->
+    <!-- Rack 1 -->
+    <rect x="16" y="366" width="20" height="4" rx="0.5" fill="rgba(80,40,0,0.9)" stroke="rgba(255,160,0,0.9)" stroke-width="0.4"/>
+    <rect x="16" y="372" width="20" height="4" rx="0.5" fill="rgba(0,60,20,0.8)" stroke="rgba(0,200,80,0.5)" stroke-width="0.4"/>
+    <rect x="16" y="378" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <rect x="16" y="384" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <rect x="16" y="390" width="20" height="4" rx="0.5" fill="rgba(0,60,20,0.8)" stroke="rgba(0,220,80,0.5)" stroke-width="0.4"/>
+    <rect x="16" y="396" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <!-- Rack 1 status LEDs -->
+    <circle cx="38" cy="368" r="1" fill="rgba(255,160,0,0.9)"><animate attributeName="opacity" values="1;0.2;1" dur="0.7s" repeatCount="indefinite"/></circle>
+    <circle cx="38" cy="374" r="1" fill="rgba(0,255,80,0.9)"><animate attributeName="opacity" values="1;0.3;1" dur="2.2s" repeatCount="indefinite"/></circle>
+    <circle cx="38" cy="380" r="1" fill="rgba(255,40,40,0.9)"><animate attributeName="opacity" values="1;0.1;1" dur="0.5s" repeatCount="indefinite"/></circle>
+    <circle cx="38" cy="386" r="1" fill="rgba(255,160,0,0.9)"><animate attributeName="opacity" values="1;0.2;1" dur="0.7s" repeatCount="indefinite"/></circle>
+    <circle cx="38" cy="392" r="1" fill="rgba(0,255,80,0.9)"><animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/></circle>
+    <circle cx="38" cy="398" r="1" fill="rgba(255,40,40,0.9)"><animate attributeName="opacity" values="1;0.1;1" dur="0.5s" repeatCount="indefinite"/></circle>
+    <!-- Rack 2 -->
+    <rect x="42" y="366" width="20" height="4" rx="0.5" fill="rgba(0,60,20,0.8)" stroke="rgba(0,200,80,0.5)" stroke-width="0.4"/>
+    <rect x="42" y="372" width="20" height="4" rx="0.5" fill="rgba(0,60,20,0.8)" stroke="rgba(0,200,80,0.5)" stroke-width="0.4"/>
+    <rect x="42" y="378" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <rect x="42" y="384" width="20" height="4" rx="0.5" fill="rgba(0,60,20,0.8)" stroke="rgba(0,200,80,0.5)" stroke-width="0.4"/>
+    <rect x="42" y="390" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <rect x="42" y="396" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <!-- Rack 2 LEDs -->
+    <circle cx="64" cy="368" r="1" fill="rgba(0,255,80,0.9)"><animate attributeName="opacity" values="1;0.3;1" dur="2.4s" repeatCount="indefinite"/></circle>
+    <circle cx="64" cy="374" r="1" fill="rgba(0,255,80,0.9)"><animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/></circle>
+    <circle cx="64" cy="380" r="1" fill="rgba(255,40,40,0.9)"><animate attributeName="opacity" values="1;0.1;1" dur="0.6s" repeatCount="indefinite"/></circle>
+    <circle cx="64" cy="386" r="1" fill="rgba(0,255,80,0.9)"><animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/></circle>
+    <circle cx="64" cy="392" r="1" fill="rgba(255,40,40,0.9)"><animate attributeName="opacity" values="1;0.1;1" dur="0.4s" repeatCount="indefinite"/></circle>
+    <circle cx="64" cy="398" r="1" fill="rgba(255,40,40,0.9)"><animate attributeName="opacity" values="1;0.1;1" dur="0.5s" repeatCount="indefinite"/></circle>
+    <!-- Rack 3 -->
+    <rect x="68" y="366" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <rect x="68" y="372" width="20" height="4" rx="0.5" fill="rgba(0,60,20,0.8)" stroke="rgba(0,200,80,0.5)" stroke-width="0.4"/>
+    <rect x="68" y="378" width="20" height="4" rx="0.5" fill="rgba(0,60,20,0.8)" stroke="rgba(0,200,80,0.5)" stroke-width="0.4"/>
+    <rect x="68" y="384" width="20" height="4" rx="0.5" fill="rgba(0,60,20,0.8)" stroke="rgba(0,200,80,0.5)" stroke-width="0.4"/>
+    <rect x="68" y="390" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <rect x="68" y="396" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <!-- Rack 3 LEDs -->
+    <circle cx="90" cy="368" r="1" fill="rgba(255,40,40,0.9)"><animate attributeName="opacity" values="1;0.1;1" dur="0.5s" repeatCount="indefinite"/></circle>
+    <circle cx="90" cy="374" r="1" fill="rgba(255,160,0,0.9)"><animate attributeName="opacity" values="1;0.2;1" dur="0.7s" repeatCount="indefinite"/></circle>
+    <circle cx="90" cy="380" r="1" fill="rgba(0,255,80,0.9)"><animate attributeName="opacity" values="1;0.3;1" dur="1.7s" repeatCount="indefinite"/></circle>
+    <circle cx="90" cy="386" r="1" fill="rgba(0,255,80,0.9)"><animate attributeName="opacity" values="1;0.3;1" dur="2.3s" repeatCount="indefinite"/></circle>
+    <circle cx="90" cy="392" r="1" fill="rgba(255,160,0,0.9)"><animate attributeName="opacity" values="1;0.2;1" dur="0.7s" repeatCount="indefinite"/></circle>
+    <circle cx="90" cy="398" r="1" fill="rgba(255,40,40,0.9)"><animate attributeName="opacity" values="1;0.1;1" dur="0.5s" repeatCount="indefinite"/></circle>
+    <!-- Rack 4 -->
+    <rect x="94" y="366" width="20" height="4" rx="0.5" fill="rgba(0,60,20,0.8)" stroke="rgba(0,200,80,0.5)" stroke-width="0.4"/>
+    <rect x="94" y="372" width="20" height="4" rx="0.5" fill="rgba(0,60,20,0.8)" stroke="rgba(0,200,80,0.5)" stroke-width="0.4"/>
+    <rect x="94" y="378" width="20" height="4" rx="0.5" fill="rgba(0,60,20,0.8)" stroke="rgba(0,200,80,0.5)" stroke-width="0.4"/>
+    <rect x="94" y="384" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <rect x="94" y="390" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <rect x="94" y="396" width="20" height="4" rx="0.5" fill="rgba(40,0,0,0.8)"  stroke="rgba(200,40,40,0.6)" stroke-width="0.4"/>
+    <!-- Rack 4 LEDs -->
+    <circle cx="116" cy="368" r="1" fill="rgba(0,255,80,0.9)"><animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/></circle>
+    <circle cx="116" cy="374" r="1" fill="rgba(0,255,80,0.9)"><animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/></circle>
+    <circle cx="116" cy="380" r="1" fill="rgba(0,255,80,0.9)"><animate attributeName="opacity" values="1;0.3;1" dur="2.6s" repeatCount="indefinite"/></circle>
+    <circle cx="116" cy="386" r="1" fill="rgba(255,40,40,0.9)"><animate attributeName="opacity" values="1;0.1;1" dur="0.6s" repeatCount="indefinite"/></circle>
+    <circle cx="116" cy="392" r="1" fill="rgba(255,160,0,0.9)"><animate attributeName="opacity" values="1;0.2;1" dur="0.7s" repeatCount="indefinite"/></circle>
+    <circle cx="116" cy="398" r="1" fill="rgba(255,40,40,0.9)"><animate attributeName="opacity" values="1;0.1;1" dur="0.7s" repeatCount="indefinite"/></circle>
+    <!-- Bottom status bar with corruption indicator -->
+    <rect x="14" y="406" width="100" height="20" rx="1" fill="rgba(0,10,3,0.9)" stroke="rgba(0,180,60,0.4)" stroke-width="0.5"/>
+    <rect x="18" y="410" width="40" height="4" rx="0.5" fill="rgba(255,40,40,0.6)" stroke="rgba(255,60,60,0.5)" stroke-width="0.3">
+      <animate attributeName="width" values="40;22;40;35;40" dur="1.2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="82" y="414" class="err-label" font-size="5">ERR: 13/24</text>
+    <text x="64" y="422" class="holo-label-sm">NODE CORRUPTION SPREADING</text>
+    <text x="64" y="355" class="holo-label">SERVER ROOM</text>
+
+    <!-- ═══════════════════════════════════════════════════════
+         CONTROL LAB  right lower  x=316 y=362 w=92 h=72
+         ═══════════════════════════════════════════════════════ -->
+    <rect x="316" y="362" width="92" height="72" rx="2"
+          fill="rgba(15,5,5,0.8)" stroke="rgba(200,50,50,0.6)" stroke-width="0.8" filter="url(#glow)"/>
+    <line x1="316" y1="396" x2="408" y2="396" stroke="rgba(180,50,50,0.2)" stroke-width="0.5"/>
+    <line x1="362" y1="362" x2="362" y2="434" stroke="rgba(180,50,50,0.2)" stroke-width="0.5"/>
+    <rect x="322" y="369" width="34" height="5" rx="0.5" fill="rgba(255,0,0,0.7)"  stroke="rgba(255,60,60,0.8)" stroke-width="0.3">
+      <animate attributeName="width" values="34;17;34;27;34" dur="1s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="322" y="378" width="34" height="5" rx="0.5" fill="rgba(255,80,0,0.7)" stroke="rgba(255,120,0,0.8)" stroke-width="0.3">
+      <animate attributeName="width" values="24;34;12;34;24" dur="1.3s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="322" y="387" width="34" height="5" rx="0.5" fill="rgba(255,0,0,0.7)"  stroke="rgba(255,60,60,0.8)" stroke-width="0.3">
+      <animate attributeName="width" values="28;6;34;22;28" dur="0.9s" repeatCount="indefinite"/>
+    </rect>
+    <!-- Crosshair -->
+    <line x1="372" y1="410" x2="386" y2="410" stroke="rgba(255,30,30,0.8)" stroke-width="0.8" filter="url(#glow)"/>
+    <line x1="379" y1="403" x2="379" y2="417" stroke="rgba(255,30,30,0.8)" stroke-width="0.8" filter="url(#glow)"/>
+    <text x="362" y="355" class="err-label big">⚠ MANUFACTURING</text>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PRIMARY POWER NODE  cx=210 cy=497 r=35
+         ═══════════════════════════════════════════════════════ -->
+    <circle cx="210" cy="507" r="35" fill="rgba(10,0,5,0.95)" stroke-width="1.2" stroke-dasharray="4,2" filter="url(#redglow)">
+      <animate attributeName="stroke" values="rgba(255,30,30,0.9);rgba(0,220,80,0.4);rgba(255,30,30,0.9)" dur="1s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="rotate" from="0 210 507" to="360 210 507" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <path d="M188,507 A22,22 0 1,1 232,507" fill="none" stroke-width="1.5" stroke-dasharray="3,2">
+      <animate attributeName="stroke" values="rgba(255,220,0,0.6);rgba(255,30,30,0.9);rgba(255,220,0,0.6)" dur="0.8s" repeatCount="indefinite"/>
+    </path>
+    <g fill="rgba(0,220,80,0.7)" font-size="5" font-family="serif" text-anchor="middle">
+      <text x="210" y="478">4M</text>
+      <text x="230" y="485">B1</text>
+      <text x="239" y="507">T1</text>
+      <text x="232" y="529">0N</text>
+    </g>
+    <polygon points="210,496 212,504 220,504 214,509 216,517 210,512 204,517 206,509 200,504 208,504"
+             stroke="rgba(0,255,100,0.5)" stroke-width="0.5" filter="url(#strongglow)">
+      <animate attributeName="fill" values="rgba(200,20,20,0.8);rgba(255,0,255,0.9);rgba(200,20,20,0.8)" dur="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.8;0.9;0.9;0.9;0.9;0.9;0.1;0.9;0.4;0.9;0.8;0.9;0.9;" dur="1.5s" repeatCount="indefinite"/>
+    </polygon>
+    <text x="210" y="553" class="err-label big">⚠ REACTOR CORE — CRITICAL</text>
+
+    <!-- Yellow location arrow pointing up -->
+    <polygon points="34,120 29,130 32,130 32,138 36,138 36,130 39,130" fill="rgba(255,220,0,0.8)" stroke="rgba(255,180,0,0.6)" stroke-width="0.5" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1s" repeatCount="indefinite"/>
+    </polygon>
+    <!-- Anomaly indicators -->
+    <!-- Purple -->
+    <circle cx="79" cy="252" r="5" fill="rgba(100,0,100,0.2)" stroke="rgba(180,0,255,0.9)" stroke-width="1.5" filter="url(#glow)">
+      <animate attributeName="r" values="2;5;2" dur="0.8s" repeatCount="indefinite"/>
+    </circle>
+    <!-- Purple -->
+    <circle cx="210" cy="60" r="4" fill="rgba(0,100,80,0.2)" stroke="rgba(0,255,180,0.8)" stroke-width="1.2" filter="url(#glow)">
+      <animate attributeName="r" values="2;6;2" dur="1.1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="50" cy="368" r="3" fill="none" stroke="rgba(0,255,255,0.7)" stroke-width="1" filter="url(#glow)">
+      <animate attributeName="r" values="2;6;2" dur="0.9s" repeatCount="indefinite"/>
+    </circle>
+        <circle cx="390" cy="80" r="5" fill="none" stroke="rgba(255,30,30,0.7)" stroke-width="1.3">
+      <animate attributeName="r" values="2;6;2" dur="1.0s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- ═══════════════════════════════════════════════════════
+         GRID COORDS
+         ═══════════════════════════════════════════════════════ -->
+    <g fill="rgba(180,80,80,0.28)" font-size="5.5" font-family="Courier New">
+      <text x="3" y="60" >A1</text><text x="3" y="120">A2</text><text x="3" y="180">A3</text>
+      <text x="3" y="240">A4</text><text x="3" y="300">A5</text><text x="3" y="360">A6</text>
+      <text x="3" y="420">A7</text><text x="3" y="480">A8</text><text x="3" y="540">A9</text>
+      <text x="60"  y="8">B</text><text x="120" y="8">C</text><text x="180" y="8">D</text>
+      <text x="240" y="8">E</text><text x="300" y="8">F</text><text x="360" y="8">G</text>
+    </g>
+
+    <!-- ═══════════════════════════════════════════════════════
+         OUTER FRAME
+         ═══════════════════════════════════════════════════════ -->
+    <rect x="2" y="2" width="416" height="576" fill="none" stroke-width="1.5">
+      <animate attributeName="stroke" values="rgba(220,30,30,0.7);rgba(0,255,120,0.3);rgba(220,30,30,0.8)" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="4" y="4" width="412" height="572" fill="none" stroke="rgba(200,50,50,0.2)" stroke-width="0.5"/>
+    <path d="M2,22 L2,2 L22,2"       fill="none" stroke="rgba(255,60,60,0.9)" stroke-width="1.5"/>
+    <path d="M398,2 L418,2 L418,22"  fill="none" stroke="rgba(255,60,60,0.9)" stroke-width="1.5"/>
+    <path d="M2,558 L2,578 L22,578"  fill="none" stroke="rgba(255,60,60,0.9)" stroke-width="1.5"/>
+    <path d="M398,578 L418,578 L418,558" fill="none" stroke="rgba(255,60,60,0.9)" stroke-width="1.5"/>
+
+    <!-- Status bar bottom -->
+    <text x="210" y="25" text-anchor="middle" font-size="8" font-family="Courier New" letter-spacing="0.15em">
+      <animate attributeName="fill" values="rgba(255,50,50,0.8);rgba(255,150,0,0.6);rgba(255,50,50,0.8)" dur="1s" repeatCount="indefinite"/>
+      JUN REACTOR FACILITY — !! SYSTEM CORRUPTION — EVACUATE !!
+    </text>
+  </svg>
+</div>
+
+<script>
+  function tick() {
+    const now = new Date();
+    const glitch = Math.random() < 0.1;
+    const h = glitch ? '??' : String(now.getHours()).padStart(2,'0');
+    const m = glitch ? '??' : String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    document.getElementById('clock').textContent = h + ':' + m + ':' + s;
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
