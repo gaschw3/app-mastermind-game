@@ -5,14 +5,14 @@ An online version of a password cracking game somewhere between [Wordle](https:/
 Help is available in the game by clicking the Help button in the top right
 corner.
 
-Originally cloned from [Lixquid](https://github.com/lixquid/app-mastermind-game) then altered somewhat to be usable for a D&D game.
+Originally cloned from [Lixquid](https://github.com/lixquid/app-mastermind-game) then altered somewhat to be usable for my D&D game.
 
 ## Features
 
 - Customizable game settings:
     - Length of the code
     - Maximum amount for each digit
-- Encode string to create sharable link
+- Encode string to create sharable link (visit `...#encode` for the secret encoder shortcut)
 - Wordle-style highlighting
 
 ## Development
@@ -26,13 +26,14 @@ Originally cloned from [Lixquid](https://github.com/lixquid/app-mastermind-game)
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/en/)
-- [Yarn](https://yarnpkg.com/en/)
+- yarn (if you like it more, I just use the npm commands)
+- gh-pages
 
 ### Getting started
 
 1. Clone the repository
-2. Install dependencies: `yarn install`
-3. Start the development server: `yarn start`
+2. Install dependencies: `npm install`
+3. Start the development server: `npm start`
 4. Open http://localhost:1234 in your browser
 
 Changes to the source files will be automatically reloaded in the browser.
@@ -40,5 +41,6 @@ Changes to the source files will be automatically reloaded in the browser.
 ### Building for production
 
 1. Remove the `dist` folder: `rm -rf dist`
-2. Build the project: `yarn build`
+2. Build the project: `npm run predeploy`
 3. The production files will be in the `dist` folder
+4. Build using gh-pages with `npm run deploy`, should deploy to [https://gaschw3.github.io/app-mastermind-game/](gaschw3 github pages)

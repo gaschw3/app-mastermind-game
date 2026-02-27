@@ -10,8 +10,11 @@
     "private": true,
     "scripts": {
         "start": "parcel src/index.html",
-        "build": "parcel build src/index.html --public-url ./"
+        "build": "parcel build src/index.html --public-url /app-mastermind-game/",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d dist"
     },
+    "homepage": "https://gaschw3.github.io/app-mastermind-game/",
     "dependencies": {
         "bootstrap": "^5.3.0-alpha3",
         "bootstrap-icons": "^1.10.5",
@@ -28,6 +31,7 @@
     },
     "devDependencies": {
         "@types/react": "^19.1.8",
-        "@types/react-dom": "^19.1.6"
+        "@types/react-dom": "^19.1.6",
+        "gh-pages": "^6.3.0"
     }
 }

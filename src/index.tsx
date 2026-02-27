@@ -3,7 +3,7 @@ import { App } from "./App";
 import { LinkGenerator } from './components/LinkGenerator';
 
 const path = window.location.pathname;
-if (path === "/debug") {
+if (location.hash == "#encode") {
     render(<LinkGenerator />, document.body);
 } else {
     render(<App />, document.body);
