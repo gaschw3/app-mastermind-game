@@ -1303,11 +1303,29 @@ var _jsxDevRuntime = require("preact/jsx-dev-runtime");
 var _hooks = require("preact/hooks");
 var _cryptoUtil = require("../lib/cryptoUtil");
 var _data = require("../lib/data");
+const CHARACTER_SET_MAP = {
+    "numeric": 10,
+    "alpha": 26,
+    "alphanumeric": 36,
+    "full-keyboard": 94
+};
+const slotMaxToCharacterSet = (slotMax)=>{
+    if (slotMax === 10) return "numeric";
+    if (slotMax === 26) return "alpha";
+    if (slotMax === 36) return "alphanumeric";
+    if (slotMax === 94) return "full-keyboard";
+    return "numeric"; // Default
+};
 function GameSetup(props) {
     const [slots, setSlots] = (0, _hooks.useState)(props.settings.slots);
     const [slotMax, setSlotMax] = (0, _hooks.useState)(props.settings.slotMax);
+    const [characterSet, setCharacterSet] = (0, _hooks.useState)(slotMaxToCharacterSet(props.settings.slotMax));
     const [slotsUnique, setSlotsUnique] = (0, _hooks.useState)(props.settings.slotsUnique);
     const [shareLink, setShareLink] = (0, _hooks.useState)("");
+    const handleCharacterSetChange = (newCharSet)=>{
+        setCharacterSet(newCharSet);
+        setSlotMax(CHARACTER_SET_MAP[newCharSet]);
+    };
     (0, _hooks.useEffect)(()=>{
         const params = new URLSearchParams(window.location.search);
         const encryptedCode = params.get("code");
@@ -1347,7 +1365,7 @@ function GameSetup(props) {
                 children: "Game Setup"
             }, void 0, false, {
                 fileName: "src/components/GameSetup.tsx",
-                lineNumber: 58,
+                lineNumber: 83,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1365,7 +1383,7 @@ function GameSetup(props) {
                                         children: "Code Length"
                                     }, void 0, false, {
                                         fileName: "src/components/GameSetup.tsx",
-                                        lineNumber: 62,
+                                        lineNumber: 87,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
@@ -1381,7 +1399,7 @@ function GameSetup(props) {
                                         }
                                     }, void 0, false, {
                                         fileName: "src/components/GameSetup.tsx",
-                                        lineNumber: 65,
+                                        lineNumber: 90,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1389,7 +1407,7 @@ function GameSetup(props) {
                                         children: "The number of slots in the code."
                                     }, void 0, false, {
                                         fileName: "src/components/GameSetup.tsx",
-                                        lineNumber: 81,
+                                        lineNumber: 106,
                                         columnNumber: 25
                                     }, this),
                                     validationErrors.slots.length > 0 && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1397,13 +1415,13 @@ function GameSetup(props) {
                                         children: validationErrors.slots.join(" ")
                                     }, void 0, false, {
                                         fileName: "src/components/GameSetup.tsx",
-                                        lineNumber: 85,
+                                        lineNumber: 110,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/components/GameSetup.tsx",
-                                lineNumber: 61,
+                                lineNumber: 86,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1412,34 +1430,64 @@ function GameSetup(props) {
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
                                         class: "form-label",
                                         for: "code-max",
-                                        children: "Code Number Max"
+                                        children: "Code Character Set"
                                     }, void 0, false, {
                                         fileName: "src/components/GameSetup.tsx",
-                                        lineNumber: 92,
+                                        lineNumber: 117,
                                         columnNumber: 25
                                     }, this),
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("select", {
                                         class: `form-control${validationErrors.slotMax.length > 0 ? " is-invalid" : ""}`,
-                                        type: "number",
                                         id: "code-max",
-                                        min: "2",
-                                        max: "10",
-                                        step: "1",
-                                        value: slotMax,
-                                        onInput: (e)=>{
-                                            setSlotMax(parseInt(e.currentTarget.value));
-                                        }
-                                    }, void 0, false, {
+                                        value: characterSet,
+                                        onChange: (e)=>{
+                                            handleCharacterSetChange(e.currentTarget.value);
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("option", {
+                                                value: "numeric",
+                                                children: "Numeric (0-9)"
+                                            }, void 0, false, {
+                                                fileName: "src/components/GameSetup.tsx",
+                                                lineNumber: 132,
+                                                columnNumber: 29
+                                            }, this),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("option", {
+                                                value: "alpha",
+                                                children: "Alphabetic (A-Z)"
+                                            }, void 0, false, {
+                                                fileName: "src/components/GameSetup.tsx",
+                                                lineNumber: 133,
+                                                columnNumber: 29
+                                            }, this),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("option", {
+                                                value: "alphanumeric",
+                                                children: "Alphanumeric (0-9, A-Z)"
+                                            }, void 0, false, {
+                                                fileName: "src/components/GameSetup.tsx",
+                                                lineNumber: 134,
+                                                columnNumber: 29
+                                            }, this),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("option", {
+                                                value: "full-keyboard",
+                                                children: "Full Keyboard"
+                                            }, void 0, false, {
+                                                fileName: "src/components/GameSetup.tsx",
+                                                lineNumber: 135,
+                                                columnNumber: 29
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "src/components/GameSetup.tsx",
-                                        lineNumber: 95,
+                                        lineNumber: 120,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                                         class: "form-text",
-                                        children: "The maximum number each slot in the code can be."
+                                        children: "The character set available for each slot in the code."
                                     }, void 0, false, {
                                         fileName: "src/components/GameSetup.tsx",
-                                        lineNumber: 111,
+                                        lineNumber: 137,
                                         columnNumber: 25
                                     }, this),
                                     validationErrors.slotMax.length > 0 && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1447,13 +1495,13 @@ function GameSetup(props) {
                                         children: validationErrors.slotMax.join(" ")
                                     }, void 0, false, {
                                         fileName: "src/components/GameSetup.tsx",
-                                        lineNumber: 115,
+                                        lineNumber: 141,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/components/GameSetup.tsx",
-                                lineNumber: 91,
+                                lineNumber: 116,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1465,7 +1513,7 @@ function GameSetup(props) {
                                         children: "Code Slots Unique"
                                     }, void 0, false, {
                                         fileName: "src/components/GameSetup.tsx",
-                                        lineNumber: 122,
+                                        lineNumber: 148,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1483,7 +1531,7 @@ function GameSetup(props) {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "src/components/GameSetup.tsx",
-                                                    lineNumber: 127,
+                                                    lineNumber: 153,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
@@ -1492,18 +1540,18 @@ function GameSetup(props) {
                                                     children: "Unique"
                                                 }, void 0, false, {
                                                     fileName: "src/components/GameSetup.tsx",
-                                                    lineNumber: 136,
+                                                    lineNumber: 162,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "src/components/GameSetup.tsx",
-                                            lineNumber: 126,
+                                            lineNumber: 152,
                                             columnNumber: 29
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "src/components/GameSetup.tsx",
-                                        lineNumber: 125,
+                                        lineNumber: 151,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1511,19 +1559,19 @@ function GameSetup(props) {
                                         children: "Whether each slot in the code must be unique."
                                     }, void 0, false, {
                                         fileName: "src/components/GameSetup.tsx",
-                                        lineNumber: 141,
+                                        lineNumber: 167,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/components/GameSetup.tsx",
-                                lineNumber: 121,
+                                lineNumber: 147,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/GameSetup.tsx",
-                        lineNumber: 60,
+                        lineNumber: 85,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1548,19 +1596,19 @@ function GameSetup(props) {
                                     class: "bi bi-play-circle me-2"
                                 }, void 0, false, {
                                     fileName: "src/components/GameSetup.tsx",
-                                    lineNumber: 158,
+                                    lineNumber: 184,
                                     columnNumber: 25
                                 }, this),
                                 "Start Game"
                             ]
                         }, void 0, true, {
                             fileName: "src/components/GameSetup.tsx",
-                            lineNumber: 148,
+                            lineNumber: 174,
                             columnNumber: 21
                         }, this)
                     }, void 0, false, {
                         fileName: "src/components/GameSetup.tsx",
-                        lineNumber: 147,
+                        lineNumber: 173,
                         columnNumber: 17
                     }, this),
                     shareLink && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1571,7 +1619,7 @@ function GameSetup(props) {
                                 children: "Shareable Game Link"
                             }, void 0, false, {
                                 fileName: "src/components/GameSetup.tsx",
-                                lineNumber: 165,
+                                lineNumber: 191,
                                 columnNumber: 25
                             }, this),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
@@ -1581,119 +1629,30 @@ function GameSetup(props) {
                                 onFocus: (e)=>e.currentTarget.select()
                             }, void 0, false, {
                                 fileName: "src/components/GameSetup.tsx",
-                                lineNumber: 166,
+                                lineNumber: 192,
                                 columnNumber: 25
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/GameSetup.tsx",
-                        lineNumber: 164,
+                        lineNumber: 190,
                         columnNumber: 21
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "src/components/GameSetup.tsx",
-                lineNumber: 59,
+                lineNumber: 84,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "src/components/GameSetup.tsx",
-        lineNumber: 57,
+        lineNumber: 82,
         columnNumber: 9
     }, this);
 }
 
-},{"preact/jsx-dev-runtime":"3mFUL","preact/hooks":"eZN76","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../lib/data":"12jTj","../lib/cryptoUtil":"gNxRW"}],"12jTj":[function(require,module,exports) {
-//#region GameSettings
-/** Container for game settings */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-/** Default game settings */ parcelHelpers.export(exports, "initialGameSettings", ()=>initialGameSettings);
-/** Returns if the given object is a valid {@link GameSettings} */ parcelHelpers.export(exports, "isGameSettings", ()=>isGameSettings);
-/** Returns if the given {@link GameSettings} are valid */ parcelHelpers.export(exports, "validateGameSettings", ()=>validateGameSettings);
-/** Creates a new game state */ parcelHelpers.export(exports, "newGameState", ()=>newGameState);
-/** Returns a random solution for the given settings */ parcelHelpers.export(exports, "randomSolution", ()=>randomSolution);
-parcelHelpers.export(exports, "getFeedback", ()=>getFeedback);
-function initialGameSettings() {
-    return {
-        slots: 4,
-        slotMax: 6,
-        slotsUnique: true
-    };
-}
-function isGameSettings(settings) {
-    return typeof settings === "object" && settings !== null && typeof settings.slots === "number" && typeof settings.slotMax === "number" && typeof settings.slotsUnique === "boolean";
-}
-function validateGameSettings(settings) {
-    const errors = {
-        slots: [],
-        slotMax: [],
-        slotsUnique: [],
-        valid: true
-    };
-    if (settings.slots < 1) {
-        errors.valid = false;
-        errors.slots.push("Slots count must be at least 1");
-    }
-    if (settings.slotMax < 1) {
-        errors.valid = false;
-        errors.slotMax.push("Slot maximum must be at least 1");
-    }
-    if (settings.slotsUnique && settings.slotMax < settings.slots) {
-        errors.valid = false;
-        errors.slotMax.push("Slot max must be at least equal to the number of slots, if slots are unique");
-    }
-    return errors;
-}
-function newGameState(settings) {
-    return {
-        solution: randomSolution(settings),
-        guess: new Array(settings.slots).fill(0),
-        guesses: [],
-        ended: undefined
-    };
-}
-function randomSolution(settings) {
-    if (settings.slotsUnique) {
-        // If unique, generate a range of numbers, shuffle,
-        // and take the first n
-        const solution = Array.from({
-            length: settings.slotMax
-        }, (_, i)=>String(i + 1));
-        for(let i = solution.length - 1; i > 0; i--){
-            const j = Math.floor(Math.random() * (i + 1));
-            [solution[i], solution[j]] = [
-                solution[j],
-                solution[i]
-            ];
-        }
-        return solution.slice(0, settings.slots);
-    } else {
-        // If not unique, generate n random numbers
-        const solution = [];
-        for(let i = 0; i < settings.slots; i++)solution.push(String(Math.floor(Math.random() * settings.slotMax) + 1));
-        return solution;
-    }
-}
-function getFeedback(guess, solution) {
-    const feedback = Array(guess.length).fill("absent");
-    const used = Array(solution.length).fill(false);
-    for(let i = 0; i < guess.length; i++)if (guess[i].toLowerCase() === solution[i].toLowerCase()) {
-        feedback[i] = "correct";
-        used[i] = true;
-    }
-    for(let i = 0; i < guess.length; i++){
-        if (feedback[i] !== "absent") continue;
-        for(let j = 0; j < solution.length; j++)if (!used[j] && guess[i].toLowerCase() === solution[j].toLowerCase()) {
-            feedback[i] = "misplaced";
-            used[j] = true;
-            break;
-        }
-    }
-    return feedback;
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gNxRW":[function(require,module,exports) {
+},{"preact/jsx-dev-runtime":"3mFUL","preact/hooks":"eZN76","../lib/cryptoUtil":"gNxRW","../lib/data":"12jTj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gNxRW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "encryptCodeString", ()=>encryptCodeString);
@@ -1738,6 +1697,125 @@ async function decryptCodeString(encrypted) {
     } catch  {
         return null;
     }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"12jTj":[function(require,module,exports) {
+//#region GameSettings
+/** Container for game settings */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+/** Default game settings */ parcelHelpers.export(exports, "initialGameSettings", ()=>initialGameSettings);
+/** Returns if the given object is a valid {@link GameSettings} */ parcelHelpers.export(exports, "isGameSettings", ()=>isGameSettings);
+/** Returns if the given {@link GameSettings} are valid */ parcelHelpers.export(exports, "validateGameSettings", ()=>validateGameSettings);
+/** Creates a new game state */ parcelHelpers.export(exports, "newGameState", ()=>newGameState);
+/** Generates the character set array based on slotMax */ parcelHelpers.export(exports, "getCharacterSet", ()=>getCharacterSet);
+/** Returns a random solution for the given settings */ parcelHelpers.export(exports, "randomSolution", ()=>randomSolution);
+parcelHelpers.export(exports, "getFeedback", ()=>getFeedback);
+function initialGameSettings() {
+    return {
+        slots: 4,
+        slotMax: 6,
+        slotsUnique: true
+    };
+}
+function isGameSettings(settings) {
+    return typeof settings === "object" && settings !== null && typeof settings.slots === "number" && typeof settings.slotMax === "number" && typeof settings.slotsUnique === "boolean";
+}
+function validateGameSettings(settings) {
+    const errors = {
+        slots: [],
+        slotMax: [],
+        slotsUnique: [],
+        valid: true
+    };
+    if (settings.slots < 1) {
+        errors.valid = false;
+        errors.slots.push("Slots count must be at least 1");
+    }
+    if (settings.slotMax < 1) {
+        errors.valid = false;
+        errors.slotMax.push("Slot maximum must be at least 1");
+    }
+    if (settings.slotsUnique && settings.slotMax < settings.slots) {
+        errors.valid = false;
+        errors.slotMax.push("Slot max must be at least equal to the number of slots, if slots are unique");
+    }
+    return errors;
+}
+function newGameState(settings) {
+    return {
+        solution: randomSolution(settings),
+        guess: new Array(settings.slots).fill(0),
+        guesses: [],
+        ended: undefined
+    };
+}
+function getCharacterSet(slotMax) {
+    if (slotMax === 10) // Numeric: 0-9
+    return Array.from({
+        length: 10
+    }, (_, i)=>String(i));
+    else if (slotMax === 26) // Alpha: A-Z
+    return Array.from({
+        length: 26
+    }, (_, i)=>String.fromCharCode(65 + i));
+    else if (slotMax === 36) {
+        // Alphanumeric: 0-9, A-Z
+        const chars = [];
+        for(let i = 0; i < 10; i++)chars.push(String(i));
+        for(let i = 0; i < 26; i++)chars.push(String.fromCharCode(65 + i));
+        return chars;
+    } else if (slotMax === 94) {
+        // Full keyboard: printable ASCII characters (space through ~)
+        const chars = [];
+        for(let i = 32; i <= 126; i++)chars.push(String.fromCharCode(i));
+        return chars;
+    }
+    // Default fallback to numeric
+    return Array.from({
+        length: slotMax
+    }, (_, i)=>String(i));
+}
+function randomSolution(settings) {
+    const charSet = getCharacterSet(settings.slotMax);
+    if (settings.slotsUnique) {
+        // If unique, shuffle the character set and take the first n
+        const solution = [
+            ...charSet
+        ];
+        for(let i = solution.length - 1; i > 0; i--){
+            const j = Math.floor(Math.random() * (i + 1));
+            [solution[i], solution[j]] = [
+                solution[j],
+                solution[i]
+            ];
+        }
+        return solution.slice(0, settings.slots);
+    } else {
+        // If not unique, generate n random characters from the set
+        const solution = [];
+        for(let i = 0; i < settings.slots; i++){
+            const randomIndex = Math.floor(Math.random() * charSet.length);
+            solution.push(charSet[randomIndex]);
+        }
+        return solution;
+    }
+}
+function getFeedback(guess, solution) {
+    const feedback = Array(guess.length).fill("absent");
+    const used = Array(solution.length).fill(false);
+    for(let i = 0; i < guess.length; i++)if (guess[i].toLowerCase() === solution[i].toLowerCase()) {
+        feedback[i] = "correct";
+        used[i] = true;
+    }
+    for(let i = 0; i < guess.length; i++){
+        if (feedback[i] !== "absent") continue;
+        for(let j = 0; j < solution.length; j++)if (!used[j] && guess[i].toLowerCase() === solution[j].toLowerCase()) {
+            feedback[i] = "misplaced";
+            used[j] = true;
+            break;
+        }
+    }
+    return feedback;
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"11p2Y":[function(require,module,exports) {
@@ -1916,7 +1994,7 @@ function Guess(props) {
     }, this);
 }
 
-},{"preact/jsx-dev-runtime":"3mFUL","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../lib/data":"12jTj"}],"l0AEt":[function(require,module,exports) {
+},{"preact/jsx-dev-runtime":"3mFUL","../lib/data":"12jTj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l0AEt":[function(require,module,exports) {
 /** Props for HelpDialog component */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "HelpDialog", ()=>HelpDialog);
@@ -2258,7 +2336,7 @@ function NewGuess(props) {
     }, this);
 }
 
-},{"preact/jsx-dev-runtime":"3mFUL","preact/hooks":"eZN76","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../lib/data":"12jTj"}],"lCbDS":[function(require,module,exports) {
+},{"preact/jsx-dev-runtime":"3mFUL","preact/hooks":"eZN76","../lib/data":"12jTj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lCbDS":[function(require,module,exports) {
 /** Props for VictoryCard component */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "VictoryCard", ()=>VictoryCard);
@@ -2417,7 +2495,7 @@ function LinkGenerator() {
             return;
         }
         const encrypted = await (0, _cryptoUtil.encryptCodeString)(codeInput);
-        const fullLink = `${window.location.origin}?code=${encodeURIComponent(encrypted)}`;
+        const fullLink = `?code=${encodeURIComponent(encrypted)}`;
         setLink(fullLink);
         setError(null);
     };
@@ -2547,6 +2625,6 @@ function LinkGenerator() {
     }, this);
 }
 
-},{"preact/jsx-dev-runtime":"3mFUL","preact/hooks":"eZN76","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../lib/cryptoUtil":"gNxRW"}]},["ddMC0","4aBH6"], "4aBH6", "parcelRequire1ea7")
+},{"preact/jsx-dev-runtime":"3mFUL","preact/hooks":"eZN76","../lib/cryptoUtil":"gNxRW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ddMC0","4aBH6"], "4aBH6", "parcelRequire1ea7")
 
 //# sourceMappingURL=index.2d3ace14.js.map
